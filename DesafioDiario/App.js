@@ -1,13 +1,17 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
 
 export default function App() {
+  const handleStart = () => {
+    Alert.alert('Bem-vindo!', 'Você clicou no botão Começar!');
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>DesafioDiario</Text>
       <Text style={styles.subtitle}>Um novo desafio todo dia!</Text>
 
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={handleStart}>
         <Text style={styles.buttonText}>Começar</Text>
       </TouchableOpacity>
 
