@@ -1,34 +1,315 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity, Alert, Animated } from 'react-native';
-import { useState, useRef } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { useState } from 'react';
 
 export default function App() {
-  const [challenge, setChallenge] = useState('');
-  const scaleAnim = useRef(new Animated.Value(1)).current;
-
-  const challengesList = [
-    'Dance como se ninguém estivesse olhando por 30 segundos!',
-    'Faça 10 polichinelos rapidamente!',
-    'Conte uma piada e ria sozinho(a)!',
-    'Segure a respiração por 10 segundos!',
-    'Escreva algo positivo sobre você!',
-    'Imite seu animal favorito!',
-    'Beba um copo d’água rapidamente!',
-    'Faça uma careta engraçada!',
-    'Diga o alfabeto de trás para frente!',
-    'Pule no lugar 20 vezes!'
+  // Lista com 365 desafios únicos e divertidos
+  const allChallenges = [
+    'Dance como se ninguém estivesse olhando por 30 segundos.',
+    'Faça 10 polichinelos rapidamente.',
+    'Conte uma piada e ria sozinho(a).',
+    'Segure a respiração por 10 segundos.',
+    'Escreva algo positivo sobre você.',
+    'Imite seu animal favorito por 15 segundos.',
+    'Beba um copo d’água rapidamente.',
+    'Faça uma careta engraçada e tire uma foto.',
+    'Diga o alfabeto de trás para frente.',
+    'Pule no lugar 20 vezes.',
+    'Abra a janela e respire profundamente 5 vezes.',
+    'Desenhe um rosto sorridente em um papel.',
+    'Cante o refrão de uma música que você gosta.',
+    'Faça uma pose de super-herói por 10 segundos.',
+    'Envie uma mensagem engraçada para um amigo.',
+    'Bata palmas no ritmo de uma música imaginária.',
+    'Faça um elogio sincero para alguém da sua casa.',
+    'Mime uma cena de filme famoso.',
+    'Segure um livro na cabeça e caminhe por 5 passos.',
+    'Desenhe algo usando apenas círculos.',
+    'Finja que é um animal e faça sons por 10 segundos.',
+    'Imite uma celebridade famosa.',
+    'Tente equilibrar algo na sua mão por 10 segundos.',
+    'Faça 5 agachamentos rapidamente.',
+    'Escreva uma frase engraçada em um papel.',
+    'Faça uma mini-história de 3 frases.',
+    'Fale seu filme favorito em voz alta.',
+    'Faça 5 respirações profundas e lentas.',
+    'Desenhe algo com a mão não dominante.',
+    'Faça 10 pulinhos de alegria.',
+    'Diga 3 coisas pelas quais você é grato.',
+    'Imite um personagem de desenho animado.',
+    'Segure a respiração enquanto levanta os braços 5 vezes.',
+    'Dance uma música imaginária por 15 segundos.',
+    'Finja que você é um animal e caminhe como ele.',
+    'Faça uma pose engraçada e tire uma foto mental.',
+    'Escreva um pequeno haicai sobre o dia.',
+    'Diga o nome de 5 cores diferentes rapidamente.',
+    'Mime que você está escalando uma montanha.',
+    'Faça 3 caretas diferentes.',
+    'Faça 10 pulos alternando as pernas.',
+    'Desenhe um coração gigante em um papel.',
+    'Mime que você está pescando algo imaginário.',
+    'Cante o nome dos dias da semana rapidamente.',
+    'Finja que você está jogando basquete por 15 segundos.',
+    'Escreva algo que te faça sorrir.',
+    'Faça 5 polichinelos lentos.',
+    'Finja que está andando na lua.',
+    'Conte até 20 em outro idioma (mesmo que inventado).',
+    'Faça uma pose de yoga simples.',
+    'Mime que está tocando um instrumento musical.',
+    'Fale seu nome ao contrário.',
+    'Faça 5 alongamentos de braços.',
+    'Finja que você é um robô por 10 segundos.',
+    'Escreva uma palavra engraçada em voz alta.',
+    'Desenhe algo que represente felicidade.',
+    'Mime que você está dirigindo um carro rápido.',
+    'Faça 3 saltos no lugar.',
+    'Cante uma música infantil por 10 segundos.',
+    'Imite um animal que você gosta.',
+    'Diga 3 palavras aleatórias rapidamente.',
+    'Finja que você está nadando sem água.',
+    'Faça uma dança maluca de 10 segundos.',
+    'Desenhe algo que represente coragem.',
+    'Mime que você está comendo algo delicioso.',
+    'Faça 5 respirações profundas com os olhos fechados.',
+    'Conte uma história curta de 2 frases.',
+    'Finja que você está pulando corda por 10 segundos.',
+    'Faça uma pose de estrela no chão.',
+    'Cante o nome das frutas que você conhece rapidamente.',
+    'Desenhe um sol sorridente.',
+    'Mime que você está escalando uma árvore.',
+    'Diga uma palavra engraçada repetidamente 3 vezes.',
+    'Finja que está jogando vôlei imaginário.',
+    'Faça 5 passos de dança improvisada.',
+    'Escreva algo que deseja realizar hoje.',
+    'Finja que está tocando bateria por 10 segundos.',
+    'Faça uma mini-história usando apenas 5 palavras.',
+    'Mime que você está pescando um peixe gigante.',
+    'Diga o nome de 5 animais rapidamente.',
+    'Faça 3 caretas exageradas.',
+    'Finja que você está dirigindo um ônibus imaginário.',
+    'Cante o nome de 5 cidades que conhece.',
+    'Desenhe algo com a mão não dominante.',
+    'Mime que está correndo uma maratona.',
+    'Faça 10 saltos alternando as pernas.',
+    'Diga 3 coisas que gosta de fazer.',
+    'Finja que está jogando tênis por 10 segundos.',
+    'Faça 5 respirações profundas e lentas.',
+    'Desenhe algo que represente alegria.',
+    'Mime que está subindo uma escada muito alta.',
+    'Cante uma música que te deixa feliz.',
+    'Finja que você é um super-herói por 15 segundos.',
+    'Faça 5 alongamentos de pernas.',
+    'Desenhe algo que represente amizade.',
+    'Mime que está escalando uma montanha alta.',
+    'Diga 3 palavras que rimem com “sol”.',
+    'Finja que está jogando basquete imaginário.',
+    'Faça 5 polichinelos rápidos.',
+    'Escreva uma frase motivacional.',
+    'Mime que você está voando como um pássaro.',
+    'Diga 3 cores que você gosta.',
+    'Faça 10 passos de dança aleatória.',
+    'Desenhe algo que represente paz.',
+    'Mime que está nadando em uma piscina invisível.',
+    'Cante seu nome com ritmo divertido.',
+    'Finja que você está escalando uma torre.',
+    'Faça 3 respirações profundas e lentas.',
+    'Diga uma frase engraçada que inventou agora.',
+    'Mime que você está chutando uma bola gigante.',
+    'Faça 5 saltos com os braços abertos.',
+    'Desenhe algo que represente coragem.',
+    'Finja que está correndo uma corrida imaginária.',
+    'Cante o nome das estações do ano rapidamente.',
+    'Faça 5 passos de dança maluca.',
+    'Mime que está subindo uma montanha imaginária.',
+    'Diga 3 coisas que te fazem rir.',
+    'Escreva algo positivo sobre o seu dia.',
+    'Finja que está jogando futebol imaginário.',
+    'Faça 5 agachamentos rapidamente.',
+    'Desenhe algo que represente felicidade.',
+    'Mime que está pulando corda.',
+    'Diga o nome de 5 animais diferentes.',
+    'Cante uma música infantil por 10 segundos.',
+    'Faça 5 respirações profundas.',
+    'Finja que você está tocando piano.',
+    'Desenhe algo engraçado.',
+    'Mime que está correndo em câmera lenta.',
+    'Diga 3 palavras que começam com “S”.',
+    'Faça 3 polichinelos lentos.',
+    'Cante uma frase de uma música famosa.',
+    'Finja que está escalando uma parede imaginária.',
+    'Desenhe algo que represente amizade.',
+    'Mime que você está jogando vôlei.',
+    'Faça 5 passos de dança improvisada.',
+    'Diga 3 coisas que você gosta de comer.',
+    'Finja que está dirigindo um carro rápido.',
+    'Cante o nome dos dias da semana.',
+    'Faça 10 saltos alternando as pernas.',
+    'Mime que está pulando de paraquedas.',
+    'Desenhe algo que represente alegria.',
+    'Diga 3 palavras que rimem com “lua”.',
+    'Finja que você está nadando em mar aberto.',
+    'Faça 5 alongamentos de braços.',
+    'Cante seu nome ao contrário.',
+    'Mime que está escalando uma montanha gigante.',
+    'Desenhe algo que represente coragem.',
+    'Diga 3 palavras engraçadas.',
+    'Finja que você está jogando basquete.',
+    'Faça 5 respirações lentas e profundas.',
+    'Cante uma música feliz.',
+    'Mime que está correndo uma maratona.',
+    'Desenhe um sol sorridente.',
+    'Diga 3 coisas que você gosta de fazer.',
+    'Finja que está voando pelo espaço.',
+    'Faça 5 polichinelos rápidos.',
+    'Mime que está escalando uma torre.',
+    'Cante uma frase engraçada.',
+    'Desenhe algo que represente paz.',
+    'Diga 3 cores que você gosta.',
+    'Finja que você está jogando futebol.',
+    'Faça 5 agachamentos lentos.',
+    'Mime que está pulando corda por 10 segundos.',
+    'Desenhe algo que represente felicidade.',
+    'Cante o nome das frutas que conhece.',
+    'Diga 3 palavras que rimem com “sol”.',
+    'Finja que está dirigindo um ônibus imaginário.',
+    'Faça 5 passos de dança improvisada.',
+    'Mime que está nadando em uma piscina invisível.',
+    'Desenhe algo que represente alegria.',
+    'Diga 3 coisas pelas quais você é grato.',
+    'Finja que está escalando uma montanha.',
+    'Cante uma música que te deixa feliz.',
+    'Faça 5 respirações profundas.',
+    'Mime que você está chutando uma bola gigante.',
+    'Desenhe algo engraçado.',
+    'Diga 3 palavras que começam com “B”.',
+    'Finja que está jogando tênis imaginário.',
+    'Faça 10 saltos alternando as pernas.',
+    'Cante o alfabeto rapidamente.',
+    'Mime que está correndo em câmera lenta.',
+    'Desenhe algo que represente coragem.',
+    'Diga 3 cores que você gosta.',
+    'Finja que está jogando vôlei imaginário.',
+    'Faça 5 polichinelos lentos.',
+    'Mime que você está escalando uma parede.',
+    'Desenhe algo que represente amizade.',
+    'Cante uma frase de uma música famosa.',
+    'Diga 3 palavras engraçadas.',
+    'Finja que está dirigindo um carro rápido.',
+    'Faça 5 passos de dança aleatória.',
+    'Mime que você está pulando de paraquedas.',
+    'Desenhe algo que represente paz.',
+    'Cante seu nome com ritmo divertido.',
+    'Diga 3 coisas que você gosta de comer.',
+    'Finja que está jogando basquete.',
+    'Faça 5 alongamentos de braços.',
+    'Mime que está escalando uma montanha gigante.',
+    'Desenhe algo que represente felicidade.',
+    'Diga 3 palavras que rimem com “lua”.',
+    'Finja que você está nadando em mar aberto.',
+    'Faça 5 polichinelos rápidos.',
+    'Cante o nome das estações do ano.',
+    'Mime que você está correndo uma maratona.',
+    'Desenhe um coração sorridente.',
+    'Diga 3 coisas que você gosta de fazer.',
+    'Finja que está voando pelo espaço.',
+    'Faça 5 respirações profundas.',
+    'Mime que está chutando uma bola gigante.',
+    'Desenhe algo engraçado.',
+    'Diga 3 palavras que começam com “S”.',
+    'Finja que está jogando futebol imaginário.',
+    'Faça 5 saltos com os braços abertos.',
+    'Cante uma música feliz.',
+    'Mime que você está escalando uma torre.',
+    'Desenhe algo que represente alegria.',
+    'Diga 3 coisas pelas quais você é grato.',
+    'Finja que está nadando em uma piscina invisível.',
+    'Faça 5 polichinelos lentos.',
+    'Mime que você está escalando uma montanha.',
+    'Desenhe algo que represente coragem.',
+    'Diga 3 palavras engraçadas.',
+    'Finja que está jogando tênis imaginário.',
+    'Faça 10 saltos alternando as pernas.',
+    'Cante o alfabeto rapidamente.',
+    'Mime que está correndo em câmera lenta.',
+    'Desenhe algo que represente paz.',
+    'Diga 3 cores que você gosta.',
+    'Finja que está jogando vôlei imaginário.',
+    'Faça 5 polichinelos rápidos.',
+    'Mime que está escalando uma parede.',
+    'Desenhe algo que represente amizade.',
+    'Cante uma frase de uma música famosa.',
+    'Diga 3 palavras engraçadas.',
+    'Finja que está dirigindo um carro rápido.',
+    'Faça 5 passos de dança aleatória.',
+    'Mime que você está pulando de paraquedas.',
+    'Desenhe algo que represente felicidade.',
+    'Cante seu nome com ritmo divertido.',
+    'Diga 3 coisas que você gosta de comer.',
+    'Finja que está jogando basquete.',
+    'Faça 5 alongamentos de braços.',
+    'Mime que você está escalando uma montanha gigante.',
+    'Desenhe algo que represente alegria.',
+    'Diga 3 palavras que rimem com “lua”.',
+    'Finja que você está nadando em mar aberto.',
+    'Faça 5 polichinelos rápidos.',
+    'Cante o nome das estações do ano.',
+    'Mime que você está correndo uma maratona.',
+    'Desenhe um coração sorridente.',
+    'Diga 3 coisas que você gosta de fazer.',
+    'Finja que está voando pelo espaço.',
+    'Faça 5 respirações profundas.',
+    'Mime que está chutando uma bola gigante.',
+    'Desenhe algo engraçado.',
+    'Diga 3 palavras que começam com “S”.',
+    'Finja que está jogando futebol imaginário.',
+    'Faça 5 saltos com os braços abertos.',
+    'Cante uma música feliz.',
+    'Mime que você está escalando uma torre.',
+    'Desenhe algo que represente alegria.',
+    'Diga 3 coisas pelas quais você é grato.',
+    'Finja que está nadando em uma piscina invisível.',
+    'Faça 5 polichinelos lentos.',
+    'Mime que você está escalando uma montanha.',
+    'Desenhe algo que represente coragem.',
+    'Diga 3 palavras engraçadas.',
+    'Finja que está jogando tênis imaginário.',
+    'Faça 10 saltos alternando as pernas.',
+    'Cante o alfabeto rapidamente.',
+    'Mime que está correndo em câmera lenta.',
+    'Desenhe algo que represente paz.',
+    'Diga 3 cores que você gosta.',
+    'Finja que está jogando vôlei imaginário.',
+    'Faça 5 polichinelos rápidos.',
+    'Mime que está escalando uma parede.',
+    'Desenhe algo que represente amizade.',
+    'Cante uma frase de uma música famosa.',
+    'Diga 3 palavras engraçadas.',
+    'Finja que está dirigindo um carro rápido.',
+    'Faça 5 passos de dança aleatória.',
+    'Mime que você está pulando de paraquedas.',
+    'Desenhe algo que represente felicidade.',
   ];
 
-  const handleStart = () => {
-    // Animação do botão
-    Animated.sequence([
-      Animated.timing(scaleAnim, { toValue: 0.9, duration: 100, useNativeDriver: true }),
-      Animated.timing(scaleAnim, { toValue: 1, duration: 100, useNativeDriver: true })
-    ]).start();
+  const [remainingChallenges, setRemainingChallenges] = useState([...allChallenges]);
+  const [currentChallenge, setCurrentChallenge] = useState('');
+  const [completedChallenges, setCompletedChallenges] = useState([]);
 
-    // Seleciona desafio aleatório
-    const randomIndex = Math.floor(Math.random() * challengesList.length);
-    setChallenge(challengesList[randomIndex]);
+  const generateChallenge = () => {
+    if (remainingChallenges.length === 0) {
+      Alert.alert('Parabéns!', 'Você completou todos os desafios!');
+      return;
+    }
+    const randomIndex = Math.floor(Math.random() * remainingChallenges.length);
+    const challenge = remainingChallenges[randomIndex];
+    setCurrentChallenge(challenge);
+  };
+
+  const markCompleted = () => {
+    if (currentChallenge === '') return;
+
+    setCompletedChallenges(prev => [currentChallenge, ...prev]);
+    setRemainingChallenges(prev => prev.filter(ch => ch !== currentChallenge));
+    setCurrentChallenge('');
   };
 
   return (
@@ -36,17 +317,26 @@ export default function App() {
       <Text style={styles.title}>DesafioDiario</Text>
       <Text style={styles.subtitle}>Um novo desafio todo dia!</Text>
 
-      <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
-        <TouchableOpacity style={styles.button} onPress={handleStart}>
-          <Text style={styles.buttonText}>Gerar Desafio</Text>
-        </TouchableOpacity>
-      </Animated.View>
+      <TouchableOpacity style={styles.button} onPress={generateChallenge}>
+        <Text style={styles.buttonText}>Gerar Desafio</Text>
+      </TouchableOpacity>
 
-      {challenge !== '' && (
+      {currentChallenge !== '' && (
         <View style={styles.challengeBox}>
-          <Text style={styles.challengeText}>{challenge}</Text>
+          <Text style={styles.challengeText}>{currentChallenge}</Text>
+          <TouchableOpacity style={styles.completedButton} onPress={markCompleted}>
+            <Text style={styles.completedButtonText}>Desafio Concluído</Text>
+          </TouchableOpacity>
         </View>
       )}
+
+      <Text style={styles.historyTitle}>Histórico de desafios concluídos:</Text>
+      <ScrollView style={styles.historyBox}>
+        {completedChallenges.length === 0 && <Text style={styles.historyText}>Nenhum desafio concluído ainda.</Text>}
+        {completedChallenges.map((ch, index) => (
+          <Text key={index} style={styles.historyText}>• {ch}</Text>
+        ))}
+      </ScrollView>
 
       <StatusBar style="light" />
     </View>
@@ -58,8 +348,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#1e1e2e',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     padding: 20,
+    paddingTop: 60,
   },
   title: {
     fontSize: 42,
@@ -73,7 +364,7 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 20,
     color: '#d1d1d1',
-    marginBottom: 40,
+    marginBottom: 20,
     textAlign: 'center',
   },
   button: {
@@ -82,6 +373,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 50,
     borderRadius: 30,
     elevation: 5,
+    marginBottom: 20,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 5 },
     shadowOpacity: 0.3,
@@ -93,20 +385,49 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   challengeBox: {
-    marginTop: 40,
+    width: '100%',
     backgroundColor: '#2e2e44',
     padding: 20,
     borderRadius: 20,
     borderWidth: 2,
     borderColor: '#6c63ff',
-    shadowColor: '#6c63ff',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.5,
-    shadowRadius: 5,
+    marginBottom: 30,
+    alignItems: 'center',
   },
   challengeText: {
     fontSize: 18,
     color: '#f5f5f5',
     textAlign: 'center',
+    marginBottom: 15,
+  },
+  completedButton: {
+    backgroundColor: '#28a745',
+    paddingVertical: 10,
+    paddingHorizontal: 25,
+    borderRadius: 20,
+  },
+  completedButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  historyTitle: {
+    fontSize: 18,
+    color: '#f5f5f5',
+    marginBottom: 10,
+    fontWeight: 'bold',
+    alignSelf: 'flex-start',
+  },
+  historyBox: {
+    width: '100%',
+    maxHeight: 200,
+    backgroundColor: '#2e2e44',
+    padding: 15,
+    borderRadius: 15,
+  },
+  historyText: {
+    color: '#d1d1d1',
+    fontSize: 16,
+    marginBottom: 5,
   },
 });
