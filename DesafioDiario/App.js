@@ -17,4 +17,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  text:{
+    color: '#000',
+    fontSize: 20,
+    fontWeight: 'bold'
+  }
 });
