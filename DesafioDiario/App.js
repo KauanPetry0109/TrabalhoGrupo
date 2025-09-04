@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
 
 export default function App() {
   const handleStart = () => {
-    Alert.alert('Bem-vindo!', 'Você clicou no botão Começar!');
+    Alert.alert('Bem-vindo!', 'Você clicou no botão Começar! agora faça 20 flexões.');
   };
 
   return (
